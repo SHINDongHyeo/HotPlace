@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static '/css/style.css' %}">
     <title>HotPlace</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <nav>
@@ -17,12 +18,15 @@
     </header>
     <main>
         메인영역
-        <button class="insta" onclick="insta()">
-            <!-- href="/hotplace"  -->
+        <button class="insta"  onclick="start();">
+            <!-- location.href='hotplace'; -->
             인스타 크롤링
         </button>
-        <div class="data_searching" style="display: none;">
-            ~ 데이터 수집중 ~
+        <div class="loading">
+            로딩
+            <div class="data_searching" >
+                
+            </div>
         </div>
     </main>
     <footer>
@@ -33,12 +37,46 @@
 
 
 <script>
-    function insta(){
-        console.log("크롤링시작")
+    async function start(){
+        console.log("A")
         a = document.getElementsByClassName("data_searching")
-        console.log(a)
+        console.log("B")
         a[0].style.display = "block"
+        console.log("C")
+        let chk = await insta(); 
     }
+    function insta(){
+        console.log("D")
+        return $.ajax({
+            type:'GET',
+            url:'instacrawlsetting',
+            dataType: 'text',
+            // async: false,
+            success:function(text){
+                console.log(text);
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); 
+            }
+        });
+
+        // $.ajax({
+        //     type:'GET',
+        //     url:'instacrawlcrawling',
+        //     dataType: 'text',
+        //     async: false,
+        //     success:function(text){
+        //         console.log(text);
+        //     },
+        //     error : function(xhr,errmsg,err) {
+        //         console.log(xhr.status + ": " + xhr.responseText); 
+        //     }
+        // });   
+    }
+
+
+    
+
 </script>
 
 </html>
