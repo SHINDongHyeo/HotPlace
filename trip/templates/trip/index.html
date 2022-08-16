@@ -24,6 +24,10 @@
         <div class="loading">
             <div id="loading_title">연결중</div>
             <div class="data_searching" ></div>
+            <div class="data_searching2" >
+                <div class="data_searching3"></div>
+                <div class="data_searching4" percent=0></div>
+            </div>
         </div>
     </main>
     <footer>
@@ -39,11 +43,28 @@
         a[0].style.display = "block"
         await insta(); 
         loading_title = document.getElementById("loading_title")
-        loading_bar = document.getElementsByClassName("dats_searching")
+        data_searching = document.getElementsByClassName("data_searching")
+        data_searching2 = document.getElementsByClassName("data_searching2")
+        data_searching3 = document.getElementsByClassName("data_searching3")
+        data_searching4 = document.getElementsByClassName("data_searching4")
         loading_title.textContent = "데이터 수집중"
-        loading_bar
+        data_searching[0].style.display="none"
+        data_searching2[0].style.display="block"
+
+
+        data_searching4[0].setAttribute("percent",33)
+
+        keywords=[ 
+            "여행",
+            "여행스타그램",
+            "여행추천",
+            "여행에미치다",
+        ]
+        number_of_posts = 5
         
-        // await insta2();
+        for (var idx in keywords){
+            await insta2(keywords[idx],number_of_posts);
+        }
     }
     function insta(){
         return $.ajax({
@@ -51,23 +72,25 @@
             url:'instacrawlsetting',
             dataType: 'text',
             success:function(text){
-                console.log(text);
+                console.log("접속여부 : "+text);
             },
             error : function(xhr,errmsg,err) {
-                console.log(xhr.status + ": " + xhr.responseText); 
+                console.log("접속여부 : "+xhr.status + ": " + xhr.responseText); 
             }
         });
     }
-    function insta2(){
+    function insta2(keyword,number_of_posts){
+        console.log(keyword,number_of_posts)
         return $.ajax({
             type:'GET',
             url:'instacrawlcrawling',
+            data: {"keyword":keyword, "number_of_posts":number_of_posts},
             dataType: 'text',
             success:function(text){
-                console.log(text);
+                console.log("수집여부 : "+text);
             },
             error : function(xhr,errmsg,err) {
-                console.log(xhr.status + ": " + xhr.responseText); 
+                console.log("수집여부 : "+xhr.status + ": " + xhr.responseText); 
             }
         });   
     }

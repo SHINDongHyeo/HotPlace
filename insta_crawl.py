@@ -19,6 +19,7 @@ import django
 class insta:
     dr = 0
     wait = 0
+    result_location = []
     def setting():
         global dr
         global wait
@@ -65,42 +66,43 @@ class insta:
         print("클릭햇음2")
     
 
-    def crawling():
+    def crawling(keyword_arg, number_of_posts):
         global dr
         global wait
+        global result_location
+
+        keyword=urllib.parse.quote(keyword_arg)
         
-        print("찾을 태그명 정하기")
-        # keyword 설정
-        keywords_origin = []
-        keywords=[]
-        keywords_origin=[ ################ 찾고 싶은 태그명들 ################
-            "여행",
-            "여행스타그램",
-            "여행추천",
-            "여행에미치다",
-        ]
+        url = f"https://www.instagram.com/explore/tags/{keyword}/"
+        dr.get(url)    
 
-        ################### 찾고 싶은 게시물 수 ######################
-        number_of_posts = 5
+        # 개별 포스트 클릭하고 위치내용 가져오기
+        try:
+            first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,"_aagu")))
+            first_post.click()
+        except:
+            pass
+        try:
+            post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
+            post_content = post_content_box.text
+            if post_content == "":
+                pass
+            else:
+                result_location.append(post_content)
+        except:
+            pass
+    
+
+        # 다음 게시물 넘어가기 버튼 클릭
+        try:
+            next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
+            next_post_button.click()
+        except:
+            pass
 
 
-        for keyword in keywords_origin:
-            keywords.append(urllib.parse.quote(keyword))
-
-
-        # keywords에 저장된 태그들을 이용해 포스트 검색 및 위치값 뽑아 result_location에 저장하기
-        result_location = []
-        for keyword in keywords:
-            url = f"https://www.instagram.com/explore/tags/{keyword}/"
-            dr.get(url)    
-
-
-            # 개별 포스트 클릭하고 위치내용 가져오기
-            try:
-                first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,"_aagu")))
-                first_post.click()
-            except:
-                break
+        # 태그 뽑고 다음 게시물 넘어가기 반복( 횟수 : 10번 )
+        for i in range(number_of_posts-1):
             try:
                 post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
                 post_content = post_content_box.text
@@ -110,9 +112,6 @@ class insta:
                     result_location.append(post_content)
             except:
                 pass
-        
-
-            # 다음 게시물 넘어가기 버튼 클릭
             try:
                 next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
                 next_post_button.click()
@@ -120,24 +119,6 @@ class insta:
                 break
 
 
-            # 태그 뽑고 다음 게시물 넘어가기 반복( 횟수 : 10번 )
-            for i in range(number_of_posts-1):
-                try:
-                    post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
-                    post_content = post_content_box.text
-                    if post_content == "":
-                        pass
-                    else:
-                        result_location.append(post_content)
-                except:
-                    pass
-                try:
-                    next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
-                    next_post_button.click()
-                except:
-                    break
-
-
-        # Django InstaHP 클래스(모델)에 저장
-        # for loc in result_location:
-        #     InstaHP(location=loc).save()
+    # Django InstaHP 클래스(모델)에 저장
+    # for loc in result_location:
+    #     InstaHP(location=loc).save()
