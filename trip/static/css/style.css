@@ -69,6 +69,14 @@ main {
     margin:auto;
     vertical-align: top;
 }
+.loading_bar {
+    width: 0px;
+    height: 100%;
+    background-color: green;
+    transition-property: width;
+    transition-duration: 1.5s;
+}
+
 .data_searching4 {
     display: inline-block;
     height: 100%;

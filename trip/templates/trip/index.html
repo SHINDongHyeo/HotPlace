@@ -25,7 +25,9 @@
             <div id="loading_title">연결중</div>
             <div class="data_searching" ></div>
             <div class="data_searching2" >
-                <div class="data_searching3"></div>
+                <div class="data_searching3">
+                    <div class="loading_bar"></div>
+                </div>
                 <div class="data_searching4" percent=0></div>
             </div>
         </div>
@@ -38,6 +40,7 @@
 
 
 <script>
+   
     async function start(){
         a = document.getElementsByClassName("loading")
         a[0].style.display = "block"
@@ -46,13 +49,11 @@
         data_searching = document.getElementsByClassName("data_searching")
         data_searching2 = document.getElementsByClassName("data_searching2")
         data_searching3 = document.getElementsByClassName("data_searching3")
+        loading_bar= document.getElementsByClassName("loading_bar")
         data_searching4 = document.getElementsByClassName("data_searching4")
         loading_title.textContent = "데이터 수집중"
         data_searching[0].style.display="none"
         data_searching2[0].style.display="block"
-
-
-        data_searching4[0].setAttribute("percent",33)
 
         keywords=[ 
             "여행",
@@ -64,7 +65,13 @@
         
         for (var idx in keywords){
             await insta2(keywords[idx],number_of_posts);
+            l = getComputedStyle(loading_bar[0]).width
+            l2 = parseInt(l.slice(0,-2))+(230/keywords.length)
+            loading_bar[0].style.width = `${l2}px`
+            data_searching4[0].setAttribute("percent",parseInt(data_searching4[0].getAttribute("percent"))+parseInt(100/keywords.length))
         }
+        data_searching4[0].setAttribute("percent",100)
+        loading_title.textContent = "데이터 수집 완료"
     }
     function insta(){
         return $.ajax({

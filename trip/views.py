@@ -25,6 +25,7 @@ def insta_crawl_crawling(request):
     number_of_posts = request.GET.get("number_of_posts")
     print(keyword)
     print(number_of_posts)
+    print(type(number_of_posts))
     ic.insta.crawling(keyword,number_of_posts) # Model인 InstaHP클래스에 데이터 저장하는 함수 실행
     return HttpResponse("result")
     # render(request, 'trip/hotplace.html')

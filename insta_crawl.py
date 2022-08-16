@@ -13,13 +13,13 @@ import configparser as parser
 
 import os
 import django
-# from trip.models import InstaHP
+from trip.models import InstaHP
 
 
 class insta:
     dr = 0
     wait = 0
-    result_location = []
+
     def setting():
         global dr
         global wait
@@ -69,7 +69,7 @@ class insta:
     def crawling(keyword_arg, number_of_posts):
         global dr
         global wait
-        global result_location
+        result_location = []
 
         keyword=urllib.parse.quote(keyword_arg)
         
@@ -81,6 +81,7 @@ class insta:
             first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,"_aagu")))
             first_post.click()
         except:
+            print("1번문제")
             pass
         try:
             post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
@@ -90,6 +91,7 @@ class insta:
             else:
                 result_location.append(post_content)
         except:
+            print("2번문제")
             pass
     
 
@@ -98,11 +100,12 @@ class insta:
             next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
             next_post_button.click()
         except:
+            print("3번문제")
             pass
 
 
         # 태그 뽑고 다음 게시물 넘어가기 반복( 횟수 : 10번 )
-        for i in range(number_of_posts-1):
+        for i in range(int(number_of_posts)-1):
             try:
                 post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
                 post_content = post_content_box.text
@@ -111,14 +114,15 @@ class insta:
                 else:
                     result_location.append(post_content)
             except:
+                print("4번문제")
                 pass
             try:
                 next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
                 next_post_button.click()
             except:
+                print("5번문제")
                 break
-
-
-    # Django InstaHP 클래스(모델)에 저장
-    # for loc in result_location:
-    #     InstaHP(location=loc).save()
+        
+            # Django InstaHP 클래스(모델)에 저장
+            for loc in result_location:
+                InstaHP(location=loc).save()
