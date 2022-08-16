@@ -19,14 +19,11 @@
     <main>
         메인영역
         <button class="insta"  onclick="start();">
-            <!-- location.href='hotplace'; -->
             인스타 크롤링
         </button>
         <div class="loading">
-            로딩
-            <div class="data_searching" >
-                
-            </div>
+            <div id="loading_title">연결중</div>
+            <div class="data_searching" ></div>
         </div>
     </main>
     <footer>
@@ -38,20 +35,21 @@
 
 <script>
     async function start(){
-        console.log("A")
-        a = document.getElementsByClassName("data_searching")
-        console.log("B")
+        a = document.getElementsByClassName("loading")
         a[0].style.display = "block"
-        console.log("C")
-        let chk = await insta(); 
+        await insta(); 
+        loading_title = document.getElementById("loading_title")
+        loading_bar = document.getElementsByClassName("dats_searching")
+        loading_title.textContent = "데이터 수집중"
+        loading_bar
+        
+        // await insta2();
     }
     function insta(){
-        console.log("D")
         return $.ajax({
             type:'GET',
             url:'instacrawlsetting',
             dataType: 'text',
-            // async: false,
             success:function(text){
                 console.log(text);
             },
@@ -59,19 +57,19 @@
                 console.log(xhr.status + ": " + xhr.responseText); 
             }
         });
-
-        // $.ajax({
-        //     type:'GET',
-        //     url:'instacrawlcrawling',
-        //     dataType: 'text',
-        //     async: false,
-        //     success:function(text){
-        //         console.log(text);
-        //     },
-        //     error : function(xhr,errmsg,err) {
-        //         console.log(xhr.status + ": " + xhr.responseText); 
-        //     }
-        // });   
+    }
+    function insta2(){
+        return $.ajax({
+            type:'GET',
+            url:'instacrawlcrawling',
+            dataType: 'text',
+            success:function(text){
+                console.log(text);
+            },
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); 
+            }
+        });   
     }
 
 
