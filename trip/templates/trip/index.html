@@ -29,6 +29,7 @@
                     <div class="loading_bar"></div>
                 </div>
                 <div class="data_searching4" percent=0></div>
+                <button id="okay" onclick="location.href='hotplace'" style="display: none;">확인</button>
             </div>
         </div>
     </main>
@@ -72,6 +73,8 @@
         }
         data_searching4[0].setAttribute("percent",100)
         loading_title.textContent = "데이터 수집 완료"
+        okay = document.getElementById("okay")
+        okay.style.display="block"
     }
     function insta(){
         return $.ajax({

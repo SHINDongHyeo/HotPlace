@@ -16,7 +16,14 @@
         헤더영역
     </header>
     <main>
-        인스타 크롤링한 내용 표시
+        인스타 크롤링한 내용 표시<br>
+        <ul>
+        {% for data in HP_list %}
+            <li>
+                <a href={{data.url}}>{{ data.location }} </a>
+            </li>
+        {% endfor %}
+        </ul>
         
     </main>
     <footer>

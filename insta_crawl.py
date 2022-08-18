@@ -89,7 +89,7 @@ class insta:
             if post_content == "":
                 pass
             else:
-                result_location.append(post_content)
+                result_location.append((post_content,dr.current_url))
         except:
             print("2번문제")
             pass
@@ -112,7 +112,7 @@ class insta:
                 if post_content == "":
                     pass
                 else:
-                    result_location.append(post_content)
+                    result_location.append((post_content,dr.current_url))
             except:
                 print("4번문제")
                 pass
@@ -124,5 +124,6 @@ class insta:
                 break
         
             # Django InstaHP 클래스(모델)에 저장
-            for loc in result_location:
-                InstaHP(location=loc).save()
+        print(result_location)
+        for loc,url in result_location:
+            InstaHP(location=loc, url=url).save()

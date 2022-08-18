@@ -2,6 +2,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render
 import insta_crawl as ic
+from .models import InstaHP
 
 
 
@@ -29,3 +30,15 @@ def insta_crawl_crawling(request):
     ic.insta.crawling(keyword,number_of_posts) # Model인 InstaHP클래스에 데이터 저장하는 함수 실행
     return HttpResponse("result")
     # render(request, 'trip/hotplace.html')
+
+def hotplace(request):
+    print("hotplace---------------------------------------------------------------------")
+    a=list(set(InstaHP.objects.all()))
+    for i in a:
+        print(type(i))
+        print(i.location)
+    a.sort(key=lambda x:x.location)
+
+    context = {"HP_list":a}
+    print(context)
+    return render(request, 'trip/hotplace.html',context)
