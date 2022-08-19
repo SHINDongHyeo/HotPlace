@@ -5,6 +5,9 @@
 ## 1. 크롤링🔍️
 웹 크롤링을 위해 <img src="https://img.shields.io/badge/Selenium-43B02A?style=flat-square&logo=selenium&logoColor=white"/> 라이브러리를 사용했고, <img src="https://img.shields.io/badge/Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white"/>에서 #여행, #핫플 등의 태그를 검색해 나온 게시물에 적힌 장소 정보를 수집했습니다.
 
+루트 디렉토리에 있는 "insta_crawl.py"파일 결과 화면
+
+
 
 ## 2. 분석🧐
 데이터 분석을 위해 <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white"/> 라이브러리를 사용했고
