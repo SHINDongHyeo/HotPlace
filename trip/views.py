@@ -2,6 +2,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.shortcuts import render
 import insta_crawl as ic
+import analyze as az
 from .models import InstaHP
 
 
@@ -33,12 +34,9 @@ def insta_crawl_crawling(request):
 
 def hotplace(request):
     print("hotplace---------------------------------------------------------------------")
-    a=list(set(InstaHP.objects.all()))
-    for i in a:
-        print(type(i))
-        print(i.location)
-    a.sort(key=lambda x:x.location)
+    data = InstaHP.objects.all()
+    result = az.solution(data)
 
-    context = {"HP_list":a}
+    context = {"HP_list":result}
     print(context)
     return render(request, 'trip/hotplace.html',context)
