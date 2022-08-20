@@ -41,6 +41,9 @@
 
 
 <script>
+    function sleep(sec) {
+        return new Promise(resolve => setTimeout(resolve, sec * 1000));
+    } 
    
     async function start(){
         a = document.getElementsByClassName("loading")
@@ -73,7 +76,9 @@
             l = getComputedStyle(loading_bar[0]).width
             l2 = parseInt(l.slice(0,-2))+(230/keywords.length)
             loading_bar[0].style.width = `${l2}px`
+            console.log(`${l2}px`)
             data_searching4[0].setAttribute("percent",parseInt(data_searching4[0].getAttribute("percent"))+parseInt(100/keywords.length))
+            await sleep(1.5)
         }
         data_searching4[0].setAttribute("percent",100)
         loading_title.textContent = "데이터 수집 완료"

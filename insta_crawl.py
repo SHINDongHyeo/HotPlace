@@ -31,7 +31,7 @@ class insta:
         options.add_experimental_option("detach", True) # 해당함수가 종료되어도 크롬창은 꺼지지 않고 유지되게 옵션설정
         dr = webdriver.Chrome("C:\MyStudy\chromedriver.exe", options=options) #웹드라이버로 크롬 웹 켜기
         wait = WebDriverWait(dr, 10)
-        dr.set_window_size(414, 800) 	#브라우저 크기 414*800으로 고정
+        dr.maximize_window()	#브라우저 화면 크기 최대로
         dr.get('https://www.instagram.com/') #인스타그램 웹 켜기    
         wait.until(EC.element_to_be_clickable((By.NAME, "username")))
         wait.until(EC.element_to_be_clickable((By.NAME,"password")))
@@ -86,10 +86,22 @@ class insta:
         try:
             post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
             post_content = post_content_box.text
+            
+            likeit1 = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aacl._aaco._aacw._adda._aacx._aada._aade")))
+            likeit = likeit1.find_element(By.TAG_NAME,"span")
+
+            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._a9ym")))
+            comments = dr.find_elements(By.CSS_SELECTOR,"._a9ym")
+            num_comments = len(comments) # 댓글 갯수
+
+            # for i in comments:
+            #     comment = i.find_element(By.CSS_SELECTOR,"._aacl._aaco._aacu._aacx._aad7._aade")
+            #     print(comment.text) # 댓글 내용
+
             if post_content == "":
                 pass
             else:
-                result_location.append((post_content,dr.current_url))
+                result_location.append((post_content, dr.current_url, likeit.text, num_comments))
         except:
             print("2번문제")
             pass
@@ -104,15 +116,23 @@ class insta:
             pass
 
 
-        # 태그 뽑고 다음 게시물 넘어가기 반복( 횟수 : 10번 )
+        # 태그 뽑고 다음 게시물 넘어가기 반복( 횟수 : 10번 ) ############################################################################
         for i in range(int(number_of_posts)-1):
             try:
                 post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
                 post_content = post_content_box.text
+
+                likeit1 = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aacl._aaco._aacw._adda._aacx._aada._aade")))
+                likeit = likeit1.find_element(By.TAG_NAME,"span")
+
+                wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._a9ym")))
+                comments = dr.find_elements(By.CSS_SELECTOR,"._a9ym")
+                num_comments = len(comments) # 댓글 갯수
+
                 if post_content == "":
                     pass
                 else:
-                    result_location.append((post_content,dr.current_url))
+                    result_location.append((post_content,dr.current_url,likeit.text,num_comments))
             except:
                 print("4번문제")
                 pass
@@ -125,5 +145,5 @@ class insta:
         
             # Django InstaHP 클래스(모델)에 저장
         print(result_location)
-        for loc,url in result_location:
-            InstaHP(location=loc, url=url).save()
+        for loc,url,like,comments in result_location:
+            InstaHP(location=loc, url=url, like=like, comments=comments).save()

@@ -22,13 +22,13 @@ def insta_crawl_setting(request):
     
 
 def insta_crawl_crawling(request):
-    print("크롤링시작확인용")
+    print("크롤링시작-----------------------------------------------")
     keyword = request.GET.get('keyword')
     number_of_posts = request.GET.get("number_of_posts")
-    print(keyword)
-    print(number_of_posts)
-    print(type(number_of_posts))
+    print('검색할태그 : ',keyword)
+    print('검색할게시물수 : ',number_of_posts)
     ic.insta.crawling(keyword,number_of_posts) # Model인 InstaHP클래스에 데이터 저장하는 함수 실행
+    print("크롤링끝-----------------------------------------------")
     return HttpResponse("result")
     # render(request, 'trip/hotplace.html')
 
