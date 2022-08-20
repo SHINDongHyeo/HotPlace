@@ -10,7 +10,8 @@ import urllib
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import configparser as parser
-
+import random
+import traceback
 import os
 import django
 from trip.models import InstaHP
@@ -47,8 +48,13 @@ class insta:
         properties = parser.ConfigParser()
         properties.read("./config.ini")
         Account = properties["ACCOUNT"]
-        act = ActionChains(dr)      #동작 명령어 지정
-        act.send_keys_to_element(id_box, Account["id"]).send_keys_to_element(password_box, Account["pw"]).click(login_button).perform()     #아이디 입력, 비밀 번호 입력, 로그인 버튼 클릭 수행
+        # act = ActionChains(dr)      #동작 명령어 지정
+        # act.send_keys_to_element(id_box, Account["id"]).send_keys_to_element(password_box, Account["pw"]).click(login_button).perform()     #아이디 입력, 비밀 번호 입력, 로그인 버튼 클릭 수행
+        id_box.send_keys(Account["id"])
+        time.sleep(random.uniform(1,3))
+        password_box.send_keys(Account["pw"])
+        time.sleep(random.uniform(1,3))
+        login_button.click()
         print("로그인보내기")
 
 
@@ -80,8 +86,8 @@ class insta:
         try:
             first_post = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,"_aagu")))
             first_post.click()
-        except:
-            print("1번문제")
+        except Exception as e:
+            print("1번문제", e)
             pass
         try:
             post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
@@ -101,18 +107,18 @@ class insta:
             if post_content == "":
                 pass
             else:
-                result_location.append((post_content, dr.current_url, likeit.text, num_comments))
-        except:
-            print("2번문제")
+                result_location.append((post_content, dr.current_url, likeit.text.replace(",",""), num_comments))
+        except Exception as e:
+            print("2번문제",e)
             pass
-    
+        print("첫번째게시물수집완료")
 
         # 다음 게시물 넘어가기 버튼 클릭
         try:
             next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
             next_post_button.click()
-        except:
-            print("3번문제")
+        except Exception as e:
+            print("3번문제",e)
             pass
 
 
@@ -121,27 +127,37 @@ class insta:
             try:
                 post_content_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aaqm")))
                 post_content = post_content_box.text
+                
+                try:
+                    # likeit1 = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aacl._aaco._aacw._adda._aacx._aada._aade")))
+                    likeit1 = dr.find_element(By.CSS_SELECTOR,"._aacl._aaco._aacw._adda._aacx._aada._aade")
+                    likeit = likeit1.find_element(By.TAG_NAME,"span")
+                    like = likeit.text.replace(",","")
+                except:
+                    like=0
 
-                likeit1 = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._aacl._aaco._aacw._adda._aacx._aada._aade")))
-                likeit = likeit1.find_element(By.TAG_NAME,"span")
+                try:
+                    # comments_box = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._a9ym")))
+                    comments_box = dr.find_element(By.CSS_SELECTOR,"._a9ym")
+                    num_comments = len(comments_box) # 댓글 갯수
+                except:
+                    num_comments = 0
 
-                wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,"._a9ym")))
-                comments = dr.find_elements(By.CSS_SELECTOR,"._a9ym")
-                num_comments = len(comments) # 댓글 갯수
 
                 if post_content == "":
                     pass
                 else:
-                    result_location.append((post_content,dr.current_url,likeit.text,num_comments))
-            except:
-                print("4번문제")
-                pass
+                    result_location.append((post_content,dr.current_url, like, num_comments))
+            except Exception as e:
+                print("4번문제",e)
+                print(traceback.format_exc())
             try:
                 next_post_button = wait.until(EC.presence_of_element_located((By.CLASS_NAME,"_aaqg,_aaqh")))
                 next_post_button.click()
-            except:
-                print("5번문제")
+            except Exception as e:
+                print("5번문제",e)
                 break
+            print(i,"번째게시물수집완료")
         
             # Django InstaHP 클래스(모델)에 저장
         print(result_location)
