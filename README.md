@@ -25,7 +25,23 @@
 
 
 ## 2. 분석🧐
-데이터 분석을 위해 <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white"/> 라이브러리를 사용했습니다.
+데이터 분석을 위해 <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white"/> 라이브러리를 사용했습니다. 목표는 가장 핫한 지역을 분석해주는 것이었지만 인스타그램 게시물에 적혀있는 위치정보 자체가 정확하지 않은 경우가 많았고, 같은 지역이라도 표현이 조금이라도 다르면(ex.에버랜드 vs 환상의나라 에버랜드) 위치가 검색이 되지 않거나 같은 장소로 인식하기가 어려운 점이 있어서 매우 간단하게 좋아요 순으로 순위만 매겨서 표로 정리했다.
+> <루트 디렉토리에 있는 analyze.py 실행결과>                        
+> 1)`InstaHP`객체로 저장된 정보를 `result`변수에 데이터프레임 형식으로 저장                      
+> 2)컬럼명 새롭게 지정                  
+> ```
+> result.columns=["location","url","like"]
+> ```                  
+> 3)가끔 같은 게시물이 검색되는 경우가 있기 때문에 url을 기준으로 중복되는 레코드를 삭제                
+> ```
+> result.drop_duplicates(["url"], inplace=True)
+> ```                 
+> 4)좋아요 순으로 내림차순 정렬
+> ```
+> result.sort_values(by="like",ascending=False, inplace=True)
+> ```           
+> 5)출력화면            
+> <img src=""/>           
 
 
 ## 3. 웹 페이지🌐

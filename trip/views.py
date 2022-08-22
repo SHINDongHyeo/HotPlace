@@ -36,7 +36,5 @@ def hotplace(request):
     print("hotplace---------------------------------------------------------------------")
     data = InstaHP.objects.all()
     result = az.solution(data)
-
-    context = {"HP_list":result}
-    print(context)
+    context = {"result":result}
     return render(request, 'trip/hotplace.html',context)

@@ -10,12 +10,13 @@ def solution(data):
     
     loc_url = []
     for i in data:
-        loc_url.append((i.location, i.url))
+        loc_url.append((i.location, i.url, i.like))
     
     result = pd.DataFrame(loc_url)
-    print(result)
+    result.columns=["location","url","like"]
+    result.drop_duplicates(["url"], inplace=True)
+    result.sort_values(by="like",ascending=False, inplace=True)
+    result.reset_index(drop=True, inplace=True)
 
-    result.drop_duplicates(ignore_index = True)
-    result.to_csv("result.csv",mode="w")
     return result
 

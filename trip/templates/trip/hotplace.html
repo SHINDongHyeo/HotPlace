@@ -16,15 +16,17 @@
         헤더영역
     </header>
     <main>
-        인스타 크롤링한 내용 표시<br>
-        <!-- <ul>
-        {% for data in HP_list %}
-            <li>
-                <a href={{data.url}}>{{ data.location }} </a>
-            </li>
-        {% endfor %}
-        </ul> -->
-        
+        <table border="1">
+            <th>순위</th>
+            <th>장소이름</th>
+            <th>url</th>
+            <th>좋아요 수</th>
+            {% for idx,data in result.iterrows %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <td>{{ data.location }}</td> <td><a href={{data.url}} target="_blank">{{ data.url }}</a></td> <td>{{ data.like }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </main>
     <footer>
         푸터영역
