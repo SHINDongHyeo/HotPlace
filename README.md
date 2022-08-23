@@ -17,8 +17,8 @@
 >3)Django의 Model로 만들어 놓은 InstaHP클래스에 저장
 >```python
 ># result_location는 게시물의 위치정보와 url을 쌍으로 저장해놓은 리스트이다.
->for loc,url in result_location:
->            InstaHP(location=loc, url=url).save()
+>for loc,url,like in result_location:
+>            InstaHP(location=loc, url=url, like=like).save()
 >```
 
 
